@@ -1,0 +1,39 @@
+{
+  "objectIdFieldName": "OBJECTID",
+  "uniqueIdField": {
+    "name": "OBJECTID",
+    "isSystemMaintained": true
+  },
+  "globalIdFieldName": "",
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 25832,
+    "latestWkid": 25832
+  },
+  "fields": [
+    {
+      "name": "totalCases",
+      "type": "esriFieldTypeDouble",
+      "alias": "totalCases",
+      "sqlType": "sqlTypeFloat",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "totalDeaths",
+      "type": "esriFieldTypeDouble",
+      "alias": "totalDeaths",
+      "sqlType": "sqlTypeFloat",
+      "domain": null,
+      "defaultValue": null
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "totalCases": 13563126,
+        "totalDeaths": 121275
+      }
+    }
+  ]
+}

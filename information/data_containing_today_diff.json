@@ -1,0 +1,134 @@
+{
+  "objectIdFieldName": "ObjectId",
+  "uniqueIdField": {
+    "name": "ObjectId",
+    "isSystemMaintained": true
+  },
+  "globalIdFieldName": "",
+  "fields": [
+    {
+      "name": "AdmUnitId",
+      "type": "esriFieldTypeInteger",
+      "alias": "AdmUnitId",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "BundeslandId",
+      "type": "esriFieldTypeInteger",
+      "alias": "BundeslandId",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzFall",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzFall",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzTodesfall",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzTodesfall",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzFallNeu",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzFallNeu",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzTodesfallNeu",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzTodesfallNeu",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzFall7T",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzFall7T",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzGenesen",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzGenesen",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzGenesenNeu",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzGenesenNeu",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzAktiv",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzAktiv",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "AnzAktivNeu",
+      "type": "esriFieldTypeInteger",
+      "alias": "AnzAktivNeu",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "Inz7T",
+      "type": "esriFieldTypeDouble",
+      "alias": "Inz7T",
+      "sqlType": "sqlTypeFloat",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "ObjectId",
+      "type": "esriFieldTypeOID",
+      "alias": "ObjectId",
+      "sqlType": "sqlTypeInteger",
+      "domain": null,
+      "defaultValue": null
+    }
+  ],
+  "exceededTransferLimit": true,
+  "features": [
+    {
+      "attributes": {
+        "AdmUnitId": 0,
+        "BundeslandId": 0,
+        "AnzFall": 13563126,
+        "AnzTodesfall": 121275,
+        "AnzFallNeu": 118032,
+        "AnzTodesfallNeu": 73,
+        "AnzFall7T": 1119512,
+        "AnzGenesen": 9673700,
+        "AnzGenesenNeu": 78800,
+        "AnzAktiv": 3768100,
+        "AnzAktivNeu": 39200,
+        "Inz7T": 1346.3,
+        "ObjectId": 1
+      }
+    }
+  ]
+}
