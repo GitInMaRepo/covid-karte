@@ -1,6 +1,6 @@
 import { RkiDiffData, RkiFeatureData } from '../data-loading';
 import { format, getElementOrThrow } from '../helpers';
-import { countryWideDiff, diffOfSpecificCounty } from './diff-calculation';
+import { diffOfSpecificCounty, countryWideDiff } from './diff-calculation';
 
 export async function renderDiffData(rootElem: Element,
   data: RkiFeatureData<RkiDiffData>,

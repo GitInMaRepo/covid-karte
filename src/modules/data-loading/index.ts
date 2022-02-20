@@ -2,17 +2,18 @@ import { getAnimationDate } from '../history-animation/date-selection';
 import { DataLoader, ParametrizedDataLoader, PermanentlyCachingDataLoader } from './data-loaders';
 import {
   RkiCountyFeatureAttributes, RkiDailyAggregatedData, RkiDailyNewCasesData, RkiDiffData,
-  RkiFeatureData, RkiSummedDayData, RkiTotalCasesPerDay, RkiTotalRecoveredByCounty
+  RkiFeatureData, RkiSummedDayData, RkiTotalCasesPerDay, RkiTotalRecoveredByCounty, RkiDiffDataNew
 } from './types';
 
 /* eslint-disable max-len */
-const AGGREGATED_DATA_URL= 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/rki_key_data_v/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=AdmUnitId%20asc&resultOffset=0&resultRecordCount=1&resultType=standard&cacheHint=true';
+const AGGREGATED_DATA_URL = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/rki_key_data_v/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=AdmUnitId%20asc&resultOffset=0&resultRecordCount=1&resultType=standard&cacheHint=true';
 const COUNTY_DATA_URL = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&outSR=4326&f=json';
 const HISTORIC_COUNTY_DATA_URL_FACTORY = (year: number, month: number, day: number) => `/assets/historic-county-data/county-data-${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}.json`;
 
 const TODAYS_SUMMED_DATA_URL = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?f=json&where=1=1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=[{%22statisticType%22:%22sum%22,%22onStatisticField%22:%22cases%22,%22outStatisticFieldName%22:%22totalCases%22},{%22statisticType%22:%22sum%22,%22onStatisticField%22:%22deaths%22,%22outStatisticFieldName%22:%22totalDeaths%22}]&resultType=standard&cacheHint=true';
 const TODAYS_DEATHS_DIFF_BY_COUNTY_URL = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&groupByFieldsForStatistics=Landkreis&where=NeuerTodesfall%20IN(1%2C%20-1)&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22AnzahlTodesfall%22%2C%22outStatisticFieldName%22%3A%22diff%22%7D%5D&resultType=standard&cacheHint=true';
 const TODAYS_CASES_DIFF_BY_COUNTY_URL = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&groupByFieldsForStatistics=Landkreis&where=NeuerFall%20IN(1,%20-1)&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=[{%22statisticType%22:%22sum%22,%22onStatisticField%22:%22AnzahlFall%22,%22outStatisticFieldName%22:%22diff%22}]&resultType=standard&cacheHint=true';
+const TODAYS_CASES_DIFF_URL = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/rki_key_data_v/FeatureServer/0/query?f=json&where=AnzFall7T%3C%3E0&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=AdmUnitId%20asc&resultOffset=0&resultRecordCount=1&resultType=standard&cacheHint=true';
 
 const DAILY_INFECTIONS_URL = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=json&outStatistics=[%20{%20%22statisticType%22:%20%22sum%22,%20%22onStatisticField%22:%20%22AnzahlFall%22,%20%22outStatisticFieldName%22:%20%22GesamtFaelle%22%20}%20]&groupByFieldsForStatistics=Refdatum,IstErkrankungsbeginn&orderByFields=Refdatum%20desc';
 const DAILY_INFECTIONS_OF_COUNTY_URL_FACTORY = (county: string) => `https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=Landkreis='${county}'&outFields=*&outSR=4326&f=json&outStatistics=[%20{%20%22statisticType%22:%20%22sum%22,%20%22onStatisticField%22:%20%22AnzahlFall%22,%20%22outStatisticFieldName%22:%20%22GesamtFaelle%22%20}%20]&groupByFieldsForStatistics=Refdatum,IstErkrankungsbeginn&orderByFields=Refdatum%20desc`;
@@ -40,10 +41,16 @@ export const loadTodaysAggregateData = todaysAggregatedDataLoader.createBoundLoa
 const todaysSummedDataLoader = new DataLoader<RkiFeatureData<RkiSummedDayData>>(TODAYS_SUMMED_DATA_URL);
 export const loadTodaysSummedData = todaysSummedDataLoader.createBoundLoadFunction();
 
-const todaysCasesDiffLoader = new DataLoader<RkiFeatureData<RkiDiffData>>(TODAYS_CASES_DIFF_BY_COUNTY_URL);
+// const todaysCasesDiffLoader = new DataLoader<RkiFeatureData<RkiDiffData>>(TODAYS_CASES_DIFF_BY_COUNTY_URL);
+// export const loadTodaysCasesDiff = todaysCasesDiffLoader.createBoundLoadFunction();
+
+const todaysCasesDiffLoader = new DataLoader<RkiFeatureData<RkiDiffDataNew>>(TODAYS_CASES_DIFF_URL);
 export const loadTodaysCasesDiff = todaysCasesDiffLoader.createBoundLoadFunction();
 
-const todaysDeathsDiffLoader = new DataLoader<RkiFeatureData<RkiDiffData>>(TODAYS_DEATHS_DIFF_BY_COUNTY_URL);
+// const todaysDeathsDiffLoader = new DataLoader<RkiFeatureData<RkiDiffData>>(TODAYS_DEATHS_DIFF_BY_COUNTY_URL);
+// export const loadTodaysDeathsDiff = todaysDeathsDiffLoader.createBoundLoadFunction();
+
+const todaysDeathsDiffLoader = new DataLoader<RkiFeatureData<RkiDiffDataNew>>(TODAYS_CASES_DIFF_URL);
 export const loadTodaysDeathsDiff = todaysDeathsDiffLoader.createBoundLoadFunction();
 
 const dailyInfectionsLoader = new DataLoader<RkiFeatureData<RkiDailyNewCasesData>>(DAILY_INFECTIONS_URL);

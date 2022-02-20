@@ -7,7 +7,10 @@ import {
 } from '../data-loading';
 import { loadTodaysAggregateData } from '../data-loading/index';
 import { format, getElementOrThrow } from '../helpers';
-import { renderDiffData } from './generic-rendering';
+
+function withSign(num: number): string {
+  return (num >= 0 ? '+' : '') + format(num);
+}
 
 export function loadAndDisplaySums(): void {
   const countyId = selectedCountyRkiId();
@@ -62,13 +65,21 @@ async function loadAndDisplayCountySpecificCasesAndDeathSums(countyId: number | 
 async function loadAndDisplayDeathDiff(countyId: number | null) {
   const data = await loadTodaysDeathsDiff();
   const section = getElementOrThrow('.deaths-section');
-  renderDiffData(section, data, countyId);
+  const leadingDiffElem = getElementOrThrow('span.daily-diff', section);
+  const secondaryDiffContainer = getElementOrThrow('.secondary-info.daily-diff', section);
+  const totalDiff = data.features[0].attributes.AnzTodesfallNeu;;
+  leadingDiffElem.textContent = withSign(totalDiff);
+  secondaryDiffContainer.classList.add('no-data');
 }
 
 async function loadAndDisplayCasesDiff(countyId: number | null) {
   const data = await loadTodaysCasesDiff();
   const section = getElementOrThrow('.cases-section');
-  renderDiffData(section, data, countyId);
+  const leadingDiffElem = getElementOrThrow('span.daily-diff', section);
+  const secondaryDiffContainer = getElementOrThrow('.secondary-info.daily-diff', section);
+  const totalDiff = data.features[0].attributes.AnzFallNeu;;
+  leadingDiffElem.textContent = withSign(totalDiff);
+  secondaryDiffContainer.classList.add('no-data');
 }
 
 async function loadAndDisplay7DayIncidence(countyId: number | null) {
@@ -78,16 +89,16 @@ async function loadAndDisplay7DayIncidence(countyId: number | null) {
   const primary = getElementOrThrow('.seven-day-incidence-section .seven-day-incidence', section);
   const secondary = getElementOrThrow('.secondary-info', section);
 
-  if(countyId == null) {
+  if (countyId == null) {
     primary.textContent = format(data.features[0].attributes.Inz7T, 1);
     secondary.classList.add('no-data');
   } else {
     const countyData = await getDataOfSelectedCounty();
-    
+
     primary.textContent = format(countyData?.attributes.cases7_per_100k ?? -1, 1);
     getElementOrThrow('span', secondary).textContent = format(data.features[0].attributes.Inz7T, 1);
     secondary.classList.remove('no-data');
   }
 
-  
+
 }
